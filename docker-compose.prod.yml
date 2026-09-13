@@ -71,9 +71,11 @@ services:
   caddy:
     image: caddy:2.8-alpine
     restart: unless-stopped
+    # Bind only to the app public IP so Mailcow keeps 80/443 on the MX IP.
+    # Example: BIND_IP=72.56.127.16
     ports:
-      - "80:80"
-      - "443:443"
+      - "${BIND_IP:?set BIND_IP in .env.prod}:80:80"
+      - "${BIND_IP:?set BIND_IP in .env.prod}:443:443"
     environment:
       ACME_EMAIL: ${ACME_EMAIL:-admin@reelshub.pro}
     volumes:
