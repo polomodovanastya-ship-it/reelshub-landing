@@ -7,6 +7,9 @@
     "cms:bootstrap": "node scripts/bootstrap.mjs && node scripts/public-permissions.mjs",
     "web:dev": "npm --prefix web run dev",
     "web:install": "npm --prefix web install",
-    "setup": "docker compose up -d && node scripts/bootstrap.mjs && node scripts/public-permissions.mjs && npm --prefix web install"
+    "setup": "docker compose up -d && node scripts/bootstrap.mjs && node scripts/public-permissions.mjs && npm --prefix web install",
+    "prod:up": "docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build",
+    "prod:down": "docker compose -f docker-compose.prod.yml --env-file .env.prod down",
+    "prod:logs": "docker compose -f docker-compose.prod.yml --env-file .env.prod logs -f"
   }
 }

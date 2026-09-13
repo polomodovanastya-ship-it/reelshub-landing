@@ -1,0 +1,17 @@
+{
+	email {$ACME_EMAIL}
+}
+
+www.reelshub.pro {
+	redir https://reelshub.pro{uri} permanent
+}
+
+reelshub.pro {
+	encode gzip
+	reverse_proxy web:3000
+}
+
+cms.reelshub.pro {
+	encode gzip
+	reverse_proxy directus:8055
+}
