@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<style>
+  @font-face{font-family:'Roobert';src:url('./assets/fonts/Roobert-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
+  @font-face{font-family:'Roobert';src:url('./assets/fonts/Roobert-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Roobert';src:url('./assets/fonts/Roobert-SemiBold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Roobert';src:url('./assets/fonts/Roobert-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+  html,body{margin:0;padding:0;background:#ffffff;color:#000000;font-family:Roobert,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  *{box-sizing:border-box}
+  a{color:inherit;text-decoration:none}
+  a:hover{opacity:.6}
+  ::selection{background:#000;color:#fff}
+  details summary::-webkit-details-marker{display:none}
+  details summary{list-style:none;cursor:pointer}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div data-m="max-width:430px;margin:0 auto" style="background:#fff;position:relative;width:100%;min-height:100svh;overflow-x:hidden">
+
+  <header data-m="left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 20px);max-width:430px;padding:0 18px;top:8px;height:26px" style="position: fixed; top: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 1140px; height: 28px; z-index: 40; display: flex; align-items: center; font-family: Roobert,sans-serif; line-height: 1; justify-content: space-between; gap: 24px; padding: 0 30px; background: #181818; border-radius: 75px; color: #fff">
+    <button type="button" aria-label="Menu" data-m="display:flex;order:2;padding:14px;margin:-14px 6px -14px auto" style="display:none;flex-direction:column;justify-content:center;gap:4px;width:22px;height:100%;margin-right:12px;padding:0;border:0;background:none;color:inherit;cursor:pointer">
+      <span style="display:block;flex:0 0 auto;width:18px;height:1px;min-height:1px;background:currentColor"></span>
+      <span style="display:block;flex:0 0 auto;width:18px;height:1px;min-height:1px;background:currentColor"></span>
+    </button>
+    <a href="./Alex Vorontsov | Main.dc.html" data-m="font-size:14px;order:1;margin-right:0" style="font-family:Roobert,sans-serif;font-size:16px;font-weight:900;letter-spacing:-.01em;display:flex;align-items:center;height:100%;line-height:1;transform:translateY(-2px);margin-right:auto;transition:opacity .4s ease"><img src="./assets/reelshub-logo-3.png" alt="reelshub" data-m="height:25px" style="height:29px;width:auto;display:block"></a>
+    <nav data-m="display:none" style="display:flex;align-items:center;height:100%;gap:clamp(14px,1.9vw,28px);white-space:nowrap;font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;line-height:1">
+      <a href="#cases" style="display:flex;align-items:center;line-height:1;transition:color .5s ease">CASES</a><a href="#course" style="display:flex;align-items:center;line-height:1;transition:color .5s ease">EDUCATION</a><a href="#ai4bvm" style="display:flex;align-items:center;line-height:1;transition:color .5s ease">AI4BVM</a><a href="#narratives" style="display:flex;align-items:center;line-height:1;transition:color .5s ease">NARRATIVES</a><a href="#contact" style="display:flex;align-items:center;line-height:1;transition:color .5s ease">CONTACTS</a>
+    </nav>
+  </header>
+
+  <div id="top" data-m="padding:66px 20px 56px" style="padding:120px 40px 90px;max-width:1140px;margin:0 auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+    <div data-m="gap:8px;margin-bottom:10px" style="position:relative;z-index:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
+      <span style="display: inline-flex; align-items: center; padding: 8px 20px; border: 1px solid #000; border-radius: 75px; font-family: Roobert,sans-serif; font-size: 12px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; line-height: 1; color: #000; border-color: #E7E7E7; background: linear-gradient(180deg, #EBEBEB, #F6E8DA); border-width: 0px">SAAS</span>
+      <span style="display: inline-flex; align-items: center; padding: 8px 20px; border: 1px solid #000; border-radius: 75px; font-family: Roobert,sans-serif; font-size: 12px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; line-height: 1; color: #000; border-width: 0px; background: linear-gradient(75deg, #0FFBC0, #2ECE8A)">CMS</span>
+      <span style="display:inline-flex;align-items:center;padding:8px 20px;border:1px solid #000;border-radius:75px;font-family:Roobert,sans-serif;font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#000">NO X</span>
+    </div>
+    <h1 data-m="font-size:clamp(26px,7.6vw,34px)" style="position:relative;z-index:2;margin:0;font-family:Roobert,sans-serif;font-size:clamp(30px,4vw,54px);font-weight:600;line-height:1.02;letter-spacing:-.03em;color:#000;text-wrap:pretty">Снимаешь reels ежедневно?</h1>
+    <p data-m="font-size:16px" style="position:relative;z-index:2;margin:0;max-width:700px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty"><span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 75px; background: linear-gradient(75deg, rgb(15, 251, 192), rgb(46, 206, 138)); color: rgb(0, 0, 0); font-family: Roobert, sans-serif; font-size: 14px; font-weight: 400; line-height: 1; vertical-align: 0.1em; margin-right: 10px;">1</span>Создай себе контент-хаб или <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 75px; background: linear-gradient(75deg, rgb(15, 251, 192), rgb(46, 206, 138)); color: rgb(0, 0, 0); font-family: Roobert, sans-serif; font-size: 14px; font-weight: 400; line-height: 1; vertical-align: 0.1em; margin-left: 5px; margin-right: 8px;">2</span>встрой контент в свой сайт</p>
+    <div data-m="flex-direction:column;align-items:center;gap:24px;margin-top:32px" style="position:relative;width:100%;margin-top:37px;display:flex;align-items:flex-start;justify-content:center;gap:32px">
+      <div ref="{{ glowRef }}" aria-hidden="true" data-m="width:160%;height:140%;left:-30%;top:-20%;filter:blur(70px)" style="position:absolute;z-index:0;left:-10%;top:-37.5%;width:120%;height:170%;pointer-events:none;filter:blur(80px);opacity:.2;border-radius:75px;background:radial-gradient(closest-side, #0FFBC0, #2ECE8A 45%, rgba(46,206,138,.35) 75%, rgba(46,206,138,0) 100%)"></div>
+      <img src="./assets/reelshub-frame-mobile-2.png" alt="reelshub mobile frame" data-m="width:240px" style="position:relative;z-index:1;flex:0 1 auto;min-width:0;margin-top:-10px;width:calc(23.6% - 7.55px);height:auto;display:block">
+      <img src="./assets/reelshub-frame-desktop-2.png" alt="reelshub desktop frame" data-m="width:100%;margin-top:0" style="position:relative;z-index:1;flex:0 1 auto;min-width:0;margin-top:-10px;width:calc(76.4% - 24.45px);height:auto;display:block">
+    </div>
+    <a href="#top" data-m="margin-top:16px" style="position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;margin-top:14px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Попробовать</a>
+  </div>
+
+  <div data-m="padding:0 20px 30px;flex-direction:column;gap:56px" style="padding:0 40px 46px;max-width:1140px;margin:0 auto;width:100%;display:flex;align-items:flex-start;justify-content:center;gap:48px">
+
+  <div id="social" data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center">
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px">
+      <img src="./assets/tiktok-icon.png" alt="TikTok" data-m="width:48px;height:48px;border-radius:9px" style="width:56px;height:56px;object-fit:contain;display:block;border-radius:10px">
+      <img src="./assets/youtube-icon.png" alt="YouTube" data-m="width:48px;height:48px;border-radius:9px" style="width:56px;height:56px;object-fit:contain;display:block;border-radius:10px">
+      <img src="./assets/instagram-icon.jpeg" alt="Instagram" data-m="width:48px;height:48px;border-radius:9px" style="width:56px;height:56px;object-fit:contain;display:block;border-radius:10px">
+    </div>
+    <h2 data-m="font-size:clamp(22px,6.2vw,28px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(26px,3vw,40px);font-weight:600;line-height:1.05;letter-spacing:-.03em;color:#000;text-wrap:pretty">Интеграция с твоими соц. сетями</h2>
+    <p data-m="font-size:16px" style="margin: 0; max-width: 640px; font-family: Roobert,sans-serif; font-size: 20px; font-weight: 300; line-height: 1.3; letter-spacing: -.01em; color: #181818; text-wrap: pretty; width: 420px">Автоматический импортируй свой контент из лент на сайт</p>
+  </div>
+
+  <div id="plugin" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center">
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px">
+      <img src="./assets/higgsfield-icon.png" alt="Higgsfield" data-m="width:48px;height:48px;border-radius:9px" style="width:56px;height:56px;object-fit:contain;display:block;border-radius:10px">
+      <img src="./assets/claude-icon.webp" alt="Claude" data-m="width:48px;height:48px;border-radius:9px" style="width:56px;height:56px;object-fit:contain;display:block;border-radius:10px">
+    </div>
+    <h2 data-m="font-size:clamp(22px,6.2vw,28px)" style="margin: 0; font-family: Roobert,sans-serif; font-size: clamp(26px,3vw,40px); font-weight: 600; line-height: 1.05; letter-spacing: -.03em; color: #000; text-wrap: pretty; width: 470px">Плагин для<br>Higgsfield &amp; Claude</h2>
+    <p data-m="font-size:16px" style="margin: 0; max-width: 640px; font-family: Roobert,sans-serif; font-size: 20px; font-weight: 300; line-height: 1.3; letter-spacing: -.01em; color: #181818; text-wrap: pretty; width: 420px">Добавляй свой текстовый, фото и видео контент, не выходя из reelshub</p>
+  </div>
+
+  </div>
+
+  <section id="domain" data-screen-label="03 Домен" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;gap:28px" style="width:100%;display:flex;align-items:center;gap:72px">
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">1</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Подключи к своему<br>домену в 1 клик</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Указываешь домен — хаб живёт на нём, без разработчика.</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      <div data-m="width:100%" style="position:relative;flex:1 1 0;min-width:0;width:100%">
+        <div ref="{{ glow2Ref }}" aria-hidden="true" data-m="width:150%;left:-25%" style="position:absolute;z-index:0;left:-15%;top:-60%;width:130%;height:220%;pointer-events:none;filter:blur(80px);opacity:.2;border-radius:75px;background:radial-gradient(closest-side, #0FFBC0, #2ECE8A 45%, rgba(46,206,138,.35) 75%, rgba(46,206,138,0) 100%)"></div>
+      <div data-m="width:100%" style="position: relative; z-index: 1; width: 369px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; padding: 18px 20px; border: 1px solid #E7E7E7; border-radius: 10px; background: #FBFBFB; height: 118px">
+        <div style="width:100%;display:flex;align-items:center;gap:16px"><span data-m="font-size:16px" style="flex:1 1 auto;min-width:0;font-family:Roobert,sans-serif;font-size:19px;font-weight:400;letter-spacing:-.01em;line-height:1;color:#000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">loverocknroll.ru</span><span aria-hidden="true" style="flex:0 0 auto;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1;color:#181818">✕</span></div>
+        <div style="width:100%;display:flex;align-items:center;justify-content:flex-end;gap:20px"><span data-m="display:none" style="flex:0 0 auto;font-family:Roobert,sans-serif;font-size:15px;font-weight:400;line-height:1.2;color:#000;border-bottom:1px solid #9a9a9a">Информация о домене</span><span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;padding:13px 24px;border-radius:10px;background:#000;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1">Подключить</span></div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="brand" data-screen-label="04 Бренд" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;gap:28px" style="width:100%;display:flex;align-items:center;gap:72px;flex-direction:row-reverse">
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">2</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Добавь лого,<br>поменяй цвета</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Логотип, палитра и шрифт — хаб выглядит как твой продукт.</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;width:100%;display:flex;flex-direction:column;gap:16px">
+
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px;padding:18px 20px;border:1px solid #E7E7E7;border-radius:10px;background:#FBFBFB">
+          <span style="font-family:Roobert,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#6d6d6d">Логотип</span>
+          <div style="display:flex;align-items:center;gap:16px">
+            <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border:1px dashed #9a9a9a;border-radius:10px;background:#fff;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;color:#9a9a9a">+</span>
+            <span style="flex:1 1 auto;min-width:0;font-family:Roobert,sans-serif;font-size:14px;font-weight:300;line-height:1.3;color:#6d6d6d">SVG или PNG, до 2 МБ</span>
+            <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;padding:11px 20px;border-radius:10px;background:#000;color:#fff;font-family:Roobert,sans-serif;font-size:15px;line-height:1">Загрузить</span>
+          </div>
+        </div>
+
+        <div style="width:100%;display:flex;flex-direction:column;gap:14px;padding:18px 20px;border:1px solid #E7E7E7;border-radius:10px;background:#FBFBFB">
+          <span style="font-family:Roobert,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#6d6d6d">Палитра</span>
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">
+            <span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#0FFBC0;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#2ECE8A;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#1F7A4D;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#E63946;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#B3121C;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#F2A93B;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#FFC93C;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#FF8A3D;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#F45BA0;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#C2408A;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#7C4DFF;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#123A8A;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#1E63D6;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#3EC1F3;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#0E7C86;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#F6E8DA;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#C9A227;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#8B5E3C;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#6d6d6d;display:block"></span><span style="width:28px;height:28px;flex:0 0 28px;border-radius:75px;background:#181818;display:block"></span>
+            <span style="width:28px;height:28px;flex:0 0 28px;border:1px dashed #9a9a9a;border-radius:75px;display:inline-flex;align-items:center;justify-content:center;font-family:Roobert,sans-serif;font-size:15px;font-weight:300;color:#9a9a9a">+</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="flex:1 1 auto;height:6px;border-radius:75px;background:linear-gradient(90deg,#0FFBC0,#2ECE8A,#181818);display:block"></span>
+            <span style="flex:0 0 auto;font-family:Roobert,sans-serif;font-size:13px;font-weight:300;line-height:1;color:#181818">#0FFBC0</span>
+          </div>
+        </div>
+
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px;padding:18px 20px;border:1px solid #E7E7E7;border-radius:10px;background:#FBFBFB">
+          <span style="font-family:Roobert,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#6d6d6d">Шрифт</span>
+          <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+            <div style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid #000;border-radius:10px;background:#fff">
+              <span style="font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;color:#000">Inter</span>
+              <span aria-hidden="true" style="font-family:Roobert,sans-serif;font-size:11px;line-height:1;color:#181818">▾</span>
+            </div>
+            <div style="display:none;width:100%;flex-direction:column;gap:2px;padding:8px;border:1px solid #E7E7E7;border-radius:10px;background:#fff">
+            <span style="display:block;padding:10px 14px;border-radius:10px;font-family:Abel,Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1.1;color:#000">Abel</span>
+            <span style="display:block;padding:10px 14px;border-radius:10px;font-family:Alef,Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1.1;color:#000">Alef</span>
+            <span style="display:block;padding:10px 14px;border-radius:10px;background:#F2F2F2;font-family:Inter,Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1.1;color:#000">Inter</span>
+            <span style="display:block;padding:10px 14px;border-radius:10px;font-family:IBM Plex Sans,Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1.1;color:#000">IBM Plex Sans</span>
+            <span style="display:block;padding:10px 14px;border-radius:10px;font-family:Gidole,Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1.1;color:#000">Gidole</span>
+            <span style="display:block;padding:10px 14px;border-radius:10px;font-family:Fauna One,Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1.1;color:#000">Fauna One</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="shelves" data-screen-label="05 Полки" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;gap:28px" style="width:100%;display:flex;align-items:center;gap:72px">
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">3</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Создавай «полки» роликов<br>и заливай контент</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Группируй ролики по темам и раскладывай их по полкам.</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      <img src="./assets/shelf-seoul.png" alt="Полка: Сеул за 5 дней" data-m="width:240px" style="flex:0 1 auto;min-width:0;width:280px;max-width:100%;height:auto;display:block;margin:0 auto">
+    </div>
+  </section>
+
+  <section id="embed" data-screen-label="06 Встраивание" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;gap:28px" style="width:100%;display:flex;align-items:center;gap:72px;flex-direction:row-reverse">
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">4</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Встраивай полки нативно<br>в свой сайт</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Полка живёт внутри твоих страниц — как родной блок, а не iframe.</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      
+    </div>
+  </section>
+
+
+  <section id="bridge" data-screen-label="07 Переход" data-m="min-height:auto;padding:20px 20px" style="min-height:25svh;display:flex;flex-direction:column;justify-content:center;padding:25px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <h2 data-m="font-size:clamp(22px,5.8vw,26px)" style="margin:0;max-width:760px;font-family:Roobert,sans-serif;font-size:clamp(24px,2.6vw,34px);font-weight:600;line-height:1.06;letter-spacing:-.03em;color:#000;text-wrap:pretty">Вот ещё сценарии использования продукта:</h2>
+    <p data-m="font-size:16px" style="margin:14px 0 0;max-width:560px;font-family:Roobert,sans-serif;font-size:19px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Пролинковывай ролики в услуги и товары, отзывы. Добавляй бесконечную ленту и&nbsp;не только</p>
+    <div data-m="flex-direction:column;gap:24px;margin-top:28px" style="margin-top:40px;display:flex;align-items:stretch;gap:40px;width:100%">
+
+        <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid #000">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:12px;line-height:1">a</span>
+          <span style="font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818">Добавляй полки на любые страницы (товары / услуги) основного сайта</span>
+          <span style="margin-top:auto;padding-top:8px;font-family:Roobert,sans-serif;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.01em;color:#17845A">+1,5–7,5% к конверсии в корзину</span>
+        </div>
+
+        <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid #000">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:12px;line-height:1">b</span>
+          <span style="font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818">Добавь в шапку сайта селектор со ссылкой на контент-хаб&nbsp;</span>
+          <span style="margin-top:auto;padding-top:8px;font-family:Roobert,sans-serif;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.01em;color:#17845A">+6–9% активных пользователей</span>
+        </div>
+
+        <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid #000">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:12px;line-height:1">c</span>
+          <span style="font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818">Добавляй в ролики ссылку на нужны продукты – пусть контент хаб продает</span>
+          <span style="margin-top:auto;padding-top:8px;font-family:Roobert,sans-serif;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.01em;color:#17845A">+2–3 минуты к времени на сайте</span>
+        </div><div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid #000">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:12px;line-height:1">d</span>
+          <span style="font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818">Добавь "бесконечную ленту" в свое мобильное приложение или на сайт</span>
+          <span style="margin-top:auto;padding-top:8px;font-family:Roobert,sans-serif;font-size:15px;font-weight:500;line-height:1.2;letter-spacing:-.01em;color:#17845A">+1–2% корзин с апселлом</span>
+        </div>
+    </div>
+    <a href="#contact" data-m="margin-top:24px" style="display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;margin-top:34px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+  </section>
+
+  <section id="admin" data-screen-label="08 Админ-панель" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1160px;margin:0 auto;width:100%">
+    <div data-m="gap:24px" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:34px">
+      <div ref="{{ cmsWrapRef }}" data-m="width:100%;height:auto" style="position:relative;width:100%;height:650px;overflow:hidden;border:1px solid #E7E7E7;border-radius:10px;background:#fff">
+        <div ref="{{ cmsStageRef }}" data-m-scale="1440" style="width:1440px;transform-origin:top left">
+          <dc-import name="CMS UI" hint-size="1440px,760px" style="width:1440px;display:block"></dc-import>
+        </div>
+      </div>
+      <div data-m="width:100%" style="width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">5</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Управляй через<br>админ-панель</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Загрузка, порядок, обложки и подписи — в одном окне.</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="share" data-screen-label="09 Шеринг" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;gap:28px" style="width:100%;display:flex;align-items:center;gap:72px">
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">6</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Делись<br>с подписчиками</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Закидывай ссылки на reels в свои посты в TG, чтобы поймать cookies</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      <div data-m="width:100%;aspect-ratio:auto;padding:26px 18px" style="flex:1 1 0;min-width:0;width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:32px;border-radius:10px;background:#F5F3EF">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:346px">
+        <span style="align-self:flex-start;font-family:Roobert,sans-serif;font-size:12px;font-weight:400;line-height:1;letter-spacing:-.01em;color:#9a9a9a">Скопировано в буфер обмена</span>
+        <div style="width: 100%; height: 40px; display:flex; align-items:center; padding:0 18px; border-radius: 75px; background: linear-gradient(75deg,#0FFBC0,#2ECE8A); font-family:Roobert,sans-serif; font-size:14px; font-weight:400; letter-spacing:-.01em; color:#181818">yourdomain.com/reels/219137</div>
+        <div style="display:flex;align-items:center;gap:12px;width:100%">
+          <span style="flex:1 1 0;display:flex;align-items:center;justify-content:center;height:55px;border-radius:75px;background:#E4DDD4"><img src="uploads/Play.png" alt="Play" style="width:16px;height:auto;display:block"></span>
+          <span style="flex:1 1 0;display:flex;align-items:center;justify-content:center;height:55px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A)"><img src="uploads/Share_iOS_Export.png" alt="Поделиться" style="width:18px;height:auto;display:block"></span>
+          <span style="flex:1 1 0;display:flex;align-items:center;justify-content:center;height:55px;border-radius:75px;background:#FDFBF6"><img src="uploads/Chevron_Right-20ee060a.png" alt="Вперёд" style="width:14px;height:auto;display:block;opacity:.35"></span>
+          <span style="flex:1 1 0;display:flex;align-items:center;justify-content:center;height:55px;border-radius:75px;background:#E4DDD4"><img src="uploads/Chevron_Left-f72713f6.png" alt="Назад" style="width:14px;height:auto;display:block"></span>
+        </div></div></div>
+    </div>
+  </section>
+
+  <section id="retarget" data-screen-label="10 Ретаргетинг" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;align-items:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;gap:28px" style="width:100%;display:flex;align-items:center;gap:72px;flex-direction:row-reverse">
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);color:#000;font-family:Roobert,sans-serif;font-size:14px;font-weight:400;line-height:1">7</span>
+        <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Настраивай рекламные цели и ретаргетинг</h2>
+        <p data-m="font-size:16px" style="margin:0;max-width:460px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818;text-wrap:pretty">Свои пиксели и аудитории — то, чего соцсети тебе не дают.</p>
+        <a href="#contact" data-m="margin-top:6px" style="display:inline-flex;align-items:center;justify-content:center;margin-top:10px;padding:13px 34px;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;font-weight:400;line-height:1;letter-spacing:-.01em;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Оставить заявку</a>
+      </div>
+      <div data-m="width:100%;order:2" style="flex:1 1 0;min-width:0;width:100%;display:flex;flex-direction:column;border:1px solid #E7E7E7;border-radius:10px;background:#fff;overflow:hidden;font-family:Roobert,sans-serif">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #EFEFEF">
+          <span style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6d6d6d">Цели</span>
+          <span style="font-size:12px;color:#9a9a9a">12</span>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:11px 18px;background:#FBFBFB">
+            <span style="font-size:14px;font-weight:500;color:#000">Отправка формы</span>
+            <span style="font-size:12px;color:#6d6d6d">ID 157641244</span>
+            <span data-m="display:none" style="font-size:12px;color:#6d6d6d">отправки всех форм</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:11px 18px">
+            <span style="font-size: 14px; font-weight: 500; color: rgb(0, 0, 0);">Клик по email</span>
+            <span style="font-size: 12px; color: rgb(109, 109, 109);">ID 163238012</span>
+            <span data-m="display:none" style="font-size: 12px; color: rgb(109, 109, 109);">клики по всем email-адресам</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:11px 18px;background:#FBFBFB">
+            <span style="font-size:14px;font-weight:500;color:#000">Главная → просмотр полки</span>
+            <span style="font-size:12px;color:#6d6d6d">ID 175246507</span>
+            <span data-m="display:none" style="font-size:12px;color:#6d6d6d">клик по кнопке</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:11px 18px">
+            <span style="font-size: 14px; font-weight: 500; color: rgb(0, 0, 0);">Воронка контент-хаба</span>
+            <span style="font-size: 12px; color: rgb(109, 109, 109);">ID 175749321</span>
+            <span data-m="display:none" style="font-size: 12px; color: rgb(109, 109, 109);">составная цель</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:9px 18px 9px 40px">
+            <span style="font-size:13px;font-weight:400;color:#181818">Пришёл на хаб</span>
+            <span style="font-size:12px;color:#9a9a9a">ID 175749322</span>
+            <span data-m="display:none" style="font-size:12px;color:#9a9a9a">идентификатор: hub_landing</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:9px 18px 9px 40px">
+            <span style="font-size:13px;font-weight:400;color:#181818">Посмотрел ролик</span>
+            <span style="font-size:12px;color:#9a9a9a">ID 175749333</span>
+            <span data-m="display:none" style="font-size:12px;color:#9a9a9a">идентификатор: hub_play</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:9px 18px 9px 40px">
+            <span style="font-size:13px;font-weight:400;color:#181818">Перешёл в товар</span>
+            <span style="font-size:12px;color:#9a9a9a">ID 175749334</span>
+            <span data-m="display:none" style="font-size:12px;color:#9a9a9a">идентификатор: hub_product</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:9px 18px 9px 40px">
+            <span style="font-size:13px;font-weight:400;color:#181818">Добавил в корзину</span>
+            <span style="font-size:12px;color:#9a9a9a">ID 175749335</span>
+            <span data-m="display:none" style="font-size:12px;color:#9a9a9a">идентификатор: hub_cart</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:11px 18px;background:#FBFBFB">
+            <span style="font-size:14px;font-weight:500;color:#000">Дошёл до оформления</span>
+            <span style="font-size:12px;color:#6d6d6d">ID 175249471</span>
+            <span data-m="display:none" style="font-size:12px;color:#6d6d6d">идентификатор: hub_checkout</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.35fr .55fr 1fr;align-items:center;gap:14px;padding:11px 18px">
+            <span style="font-size:14px;font-weight:500;color:#000">Заявка с полки</span>
+            <span style="font-size:12px;color:#6d6d6d">ID 180025007</span>
+            <span data-m="display:none" style="font-size:12px;color:#6d6d6d">форма</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" data-screen-label="11 Стоимость" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;flex-direction:column;justify-content:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <div data-m="flex-direction:column;align-items:flex-start;gap:18px;margin:0 0 22px" style="display:flex;align-items:center;justify-content:space-between;gap:32px;width:100%;margin:0 0 34px">
+    <h2 data-m="font-size:clamp(24px,6.6vw,30px);margin:0" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000">Стоимость</h2>
+    <div data-m="margin:0" style="display:inline-flex;align-items:center;gap:4px;margin:0;padding:4px;border:1px solid #000;border-radius:75px">
+      <button type="button" onClick="{{ setMonthly }}" style="display:inline-flex;align-items:center;padding:9px 22px;border:0;border-radius:75px;background:{{ mBg }};color:{{ mFg }};font-family:Roobert,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;line-height:1;cursor:pointer;transition:background .4s ease,color .4s ease">Месяц</button>
+      <button type="button" onClick="{{ setAnnual }}" style="display:inline-flex;align-items:center;padding:9px 22px;border:0;border-radius:75px;background:{{ aBg }};color:{{ aFg }};font-family:Roobert,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;line-height:1;cursor:pointer;transition:background .4s ease,color .4s ease">Год</button>
+    </div>
+    </div>
+    <div data-m="flex-direction:column;gap:34px" style="display:flex;align-items:stretch;gap:48px;width:100%">
+
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px;padding-top:22px;border-top:1px solid #000">
+        <div style="display:flex;align-items:center;gap:10px;min-height:24px">
+          <span style="font-family:Roobert,sans-serif;font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#000">Старт</span>
+          
+        </div>
+        <div style="font-family:Roobert,sans-serif;font-size:clamp(30px,3.4vw,44px);font-weight:600;line-height:1;letter-spacing:-.03em;color:#000">{{ p1 }}</div>
+        <div style="font-family:Roobert,sans-serif;font-size:14px;font-weight:300;line-height:1.3;color:#6d6d6d">{{ period }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Roobert,sans-serif;font-size:16px;font-weight:300;line-height:1.3;color:#181818"><span>1 хаб на общем домене</span><span>3 полки до 5 reels каждая</span><span>Суб-домен на reelshub</span></div>
+        <a href="#contact" style="display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;margin-top:auto;padding-top:8px;padding:11px 28px;border:1px solid #000;border-radius:75px;font-family:Roobert,sans-serif;font-size:15px;line-height:1;color:#000;transition:letter-spacing .8s cubic-bezier(.19,1,.22,1),opacity .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.6;letter-spacing:.02em">Выбрать</a>
+      </div>
+
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px;padding-top:22px;border-top:1px solid #2ECE8A">
+        <div style="display:flex;align-items:center;gap:10px;min-height:24px">
+          <span style="font-family:Roobert,sans-serif;font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#000">Хаб</span>
+          <span style="display:inline-flex;align-items:center;padding:6px 14px;border-radius:75px;background:linear-gradient(75deg,#0FFBC0,#2ECE8A);font-family:Roobert,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#000">ПОПУЛЯРНО</span>
+        </div>
+        <div style="font-family:Roobert,sans-serif;font-size:clamp(30px,3.4vw,44px);font-weight:600;line-height:1;letter-spacing:-.03em;color:#000">{{ p2 }}</div>
+        <div style="font-family:Roobert,sans-serif;font-size:14px;font-weight:300;line-height:1.3;color:#6d6d6d">{{ period }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Roobert,sans-serif;font-size:16px;font-weight:300;line-height:1.3;color:#181818"><span>1 хаб на своем домене</span><span>20 полок до 10 reels каждая</span><span>Фото / видео / gif reels</span><span>Настройка цветовой схемы</span><span>Доступ к API для импорта из соц. сетей</span><span>Подключение Я.Метрики</span><span>Экспорт токенов в Яндекс.Аудитории</span></div>
+        <a href="#contact" style="display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;margin-top:auto;padding-top:8px;padding:11px 28px;border:1px solid #000;border-radius:75px;font-family:Roobert,sans-serif;font-size:15px;line-height:1;color:#000;transition:letter-spacing .8s cubic-bezier(.19,1,.22,1),opacity .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.6;letter-spacing:.02em">Выбрать</a>
+      </div>
+
+      <div data-m="width:100%" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px;padding-top:22px;border-top:1px solid #000">
+        <div style="display:flex;align-items:center;gap:10px;min-height:24px">
+          <span style="font-family:Roobert,sans-serif;font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#000">Студия</span>
+          
+        </div>
+        <div style="font-family:Roobert,sans-serif;font-size:clamp(30px,3.4vw,44px);font-weight:600;line-height:1;letter-spacing:-.03em;color:#000">{{ p3 }}</div>
+        <div style="font-family:Roobert,sans-serif;font-size:14px;font-weight:300;line-height:1.3;color:#6d6d6d">{{ period }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-family:Roobert,sans-serif;font-size:16px;font-weight:300;line-height:1.3;color:#181818"><span style="font-weight: 700">Всё, что в "Хаб", а также:</span><span>Несколько хабов на своих доменах</span><span>от 30 полок до 10 reels и до безлимита</span><span>Фото / видео / gif / опросы reels</span><span>Интеграция в мобильное приложение</span><span>Бесконечная лента</span><span>Встраивание aka TG-кружочков</span><span>Модуль "Журнал" для постинга статей</span><span>MCP &amp; CLI (интеграция с LLM)</span><span>Поддержка 24x7</span></div>
+        <a href="#contact" style="display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;margin-top:auto;padding-top:8px;padding:11px 28px;border:1px solid #000;border-radius:75px;font-family:Roobert,sans-serif;font-size:15px;line-height:1;color:#000;transition:letter-spacing .8s cubic-bezier(.19,1,.22,1),opacity .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.6;letter-spacing:.02em">Выбрать</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" data-screen-label="12 Контакты" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;flex-direction:column;justify-content:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <h2 data-m="font-size:clamp(24px,6.6vw,30px)" style="margin:0;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000;text-wrap:pretty">Как попробовать?<br>Оставьте контакты</h2>
+    <p data-m="font-size:16px" style="margin:16px 0 0;max-width:520px;font-family:Roobert,sans-serif;font-size:20px;font-weight:300;line-height:1.3;letter-spacing:-.01em;color:#181818">Открываем доступ вручную — напишем в течение дня.</p>
+    <form data-m="margin-top:32px;flex-direction:column;gap:24px" style="margin-top:52px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:32px;width:100%;max-width:900px">
+
+        
+
+        <label style="display:flex;flex-direction:column;gap:8px;flex:1 1 220px;min-width:0">
+          <span style="font-family:Roobert,sans-serif;font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#6d6d6d">Telegram или email</span>
+          <input type="text" placeholder="@username" style="width:100%;padding:12px 0;border:0;border-bottom:1px solid #000;border-radius:0;background:transparent;font-family:Roobert,sans-serif;font-size:18px;font-weight:300;color:#000;outline:none">
+        </label>
+
+        
+      <button type="button" data-m="width:100%" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 36px;border:0;border-radius:75px;background:#181818;color:#fff;font-family:Roobert,sans-serif;font-size:16px;line-height:1;cursor:pointer;transition:opacity .8s cubic-bezier(.19,1,.22,1),letter-spacing .8s cubic-bezier(.19,1,.22,1)" style-hover="opacity:.75;letter-spacing:.02em">Отправить</button>
+      <label data-m="width:100%" style="width:100%;display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+        <input type="checkbox" style="width:16px;height:16px;margin:2px 0 0;flex:0 0 16px;accent-color:#2ECE8A;cursor:pointer">
+        <span style="font-family:Roobert,sans-serif;font-size:12px;font-weight:300;line-height:1.35;color:#6d6d6d">Я согласен с <a href="#contact" style="border-bottom:1px solid #6d6d6d">Политикой обработки персональных данных</a></span>
+      </label>
+    </form>
+  </section>
+
+  <section id="faq" data-screen-label="13 Q&amp;A" data-m="min-height:auto;padding:24px 20px" style="min-height:50svh;display:flex;flex-direction:column;justify-content:center;padding:38px 40px;max-width:1140px;margin:0 auto;width:100%">
+    <h2 data-m="font-size:clamp(24px,6.6vw,30px);margin:0 0 24px" style="margin:0 0 34px;font-family:Roobert,sans-serif;font-size:clamp(28px,3.2vw,44px);font-weight:600;line-height:1.04;letter-spacing:-.03em;color:#000">Q&amp;A</h2>
+    <div style="display:flex;flex-direction:column;width:100%;border-top:1px solid #000">
+
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Кому это полезно?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Блоггерам, авторам курсов, туристическому бизнесу, клиникам, строительным компаниям, застройщикам — всем, кто снимает много контента, или кто хочет показать пользовательский (UGC) контент.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Нужен ли разработчик?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Нет. Домен, лого и цвета настраиваются в админ-панели.</p>
+    </details>
+
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Откуда берётся контент?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Из ваших лент TikTok, YouTube и Instagram — импорт автоматический.</p>
+    </details>
+
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Можно встроить хаб в существующий сайт?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Да, отдельным блоком или страницей на вашем домене.</p>
+    </details>
+
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Кому принадлежит аудитория?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Вам: трафик идёт на ваш домен, пиксели и аудитории — ваши.</p>
+    </details>
+
+    
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">А плеер быстро работает?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Видео загружается в среднем от 0.25 до 1.5 секунд — и начинает играть моментально, как у Instagram или YouTube.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Карточки бывают только с видео?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Нет. Можно добавлять фото, баннеры, опросы, gif.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Мы снимаем (или нам присылают) много «кружков» в Telegram?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">В тарифе «Студия» есть инструмент и для их размещения.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Зачем делать свой публичный хаб?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Ваш контент в соцсетях генерит вам аудитории, но даёт мало средств для работы с ней с помощью рекламы.</p>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Хаб позволит приводить пользователей на классный контент и таргетировать / удерживать их рекламой через цели.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">У вас есть бесконечная лента?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Да, в тарифе «Студия» можно добавить к себе на сайт или в мобильное приложение такую ленту и дать пользователям «залипнуть».</p>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Это здорово увеличивает DAU/MAU и частоту заходов пользователей к вам на ресурс.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Куда можно встроить reels?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">В карточку товара, если у вас интернет-магазин.</p>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">В страницу тура, если вы турфирма.</p>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">В блок с отзывами, если вы клиника или клининговый бизнес.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Кому принадлежит хостинг?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Нам, а в тарифе «Студия» есть опция — развернуть в вашем облаке или на вашем хостинге.</p>
+    </details>
+    <details data-m="padding:18px 0" style="width:100%;padding:22px 0;border-bottom:1px solid #000">
+      <summary style="display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:Roobert,sans-serif;font-size:clamp(18px,2vw,22px);font-weight:400;letter-spacing:-.01em;line-height:1.2;color:#000">Я могу добавлять кастомные блоки контента?<span style="flex:0 0 auto;font-weight:300">+</span></summary>
+      <p style="margin:14px 0 0;max-width:760px;font-family:Roobert,sans-serif;font-size:17px;font-weight:300;line-height:1.4;color:#181818">Да, в тарифе «Студия».</p>
+    </details>
+    </div>
+  </section>
+
+  <footer data-screen-label="14 Footer" data-m="padding:20px 20px 40px;flex-direction:column;align-items:flex-start;gap:28px" style="padding:27px 40px 56px;max-width:1140px;margin:0 auto;width:100%;display:flex;align-items:flex-end;justify-content:space-between;gap:48px;border-top:1px solid #000">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <span style="display:inline-flex;align-items:center;align-self:flex-start;padding:8px 22px;border-radius:75px;background:#181818"><img src="./assets/reelshub-logo-3.png" alt="reelshub" style="height:22px;width:auto;display:block"></span>
+      <span style="font-family:Roobert,sans-serif;font-size:11px;font-weight:300;line-height:1.4;color:#6d6d6d">Контент-хаб для авторов<br>© 2026 reelshub</span>
+    </div>
+    <div data-m="align-items:flex-start" style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-family:Roobert,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1">
+      <a href="#pricing" style="transition:opacity .4s ease">СТОИМОСТЬ</a>
+      <a href="#faq" style="transition:opacity .4s ease">Q&amp;A</a>
+      <a href="#contact" style="transition:opacity .4s ease">КОНТАКТЫ</a>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  glowRef = React.createRef();
+  glow2Ref = React.createRef();
+  state = { annual: false };
+  _base = [11880, 29880, 82800];
+  renderVals() {
+    const a = this.state.annual;
+    const fmt = n => n.toLocaleString('ru-RU').replace(/\u00a0/g, ' ') + ' ₽';
+    const price = n => fmt(a ? Math.round(n * 0.8) : n);
+    return {
+      glowRef: this.glowRef,
+      glow2Ref: this.glow2Ref,
+      p1: price(this._base[0]), p2: price(this._base[1]), p3: 'от ' + price(this._base[2]),
+      period: a ? 'в месяц при оплате за год' : 'в месяц',
+      mBg: a ? 'transparent' : '#181818', mFg: a ? '#000' : '#fff',
+      aBg: a ? '#181818' : 'transparent', aFg: a ? '#fff' : '#000',
+      setMonthly: () => this.setState({ annual: false }),
+      setAnnual: () => this.setState({ annual: true })
+    };
+  }
+  applyLayout = () => {
+    const mobile = innerWidth < 760;
+    document.querySelectorAll('[data-m]').forEach(el => {
+      if (el.dataset.baseStyle === undefined) el.dataset.baseStyle = el.getAttribute('style') || '';
+      const want = mobile ? el.dataset.baseStyle + ';' + el.dataset.m : el.dataset.baseStyle;
+      if (el.getAttribute('style') !== want) el.setAttribute('style', want);
+    });
+    document.querySelectorAll('[data-m-scale]').forEach(el => {
+      if (el.dataset.baseStyle === undefined) el.dataset.baseStyle = el.getAttribute('style') || '';
+      if (!mobile) { if (el.getAttribute('style') !== el.dataset.baseStyle) el.setAttribute('style', el.dataset.baseStyle); el.style.transform = ''; el.style.marginBottom = ''; return; }
+      const w = parseInt(el.dataset.mScale, 10);
+      el.setAttribute('style', el.dataset.baseStyle + ';width:' + w + 'px;transform-origin:top left');
+      const pcs = getComputedStyle(el.parentElement);
+      const avail = el.parentElement.clientWidth - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight);
+      const s = avail / w;
+      const hh = el.offsetHeight;
+      el.style.transform = 'scale(' + s + ')';
+      el.style.marginBottom = -(hh * (1 - s)) + 'px';
+    });
+  };
+  componentDidMount() {
+    this.applyLayout();
+    this._ro = setInterval(this.applyLayout, 400);
+    addEventListener('resize', this.applyLayout);
+    this._stop = false;
+    this._state = {};
+    this._drift('a', this.glowRef);
+    this._drift('b', this.glow2Ref);
+  }
+  componentWillUnmount() { this._stop = true; clearInterval(this._ro); removeEventListener('resize', this.applyLayout); }
+  _drift = (key, ref) => {
+    const el = ref.current;
+    if (!el || this._stop) return;
+    const r = (a, b) => a + Math.random() * (b - a);
+    const st = (this._state[key] = this._state[key] || {});
+    if (st.anim) { st.anim.onfinish = null; st.anim = null; }
+    const from = st.last || { x: 0, y: 0, s: 1 };
+    const to = { x: r(-55, 55), y: r(-38, 38), s: r(0.75, 1.35) };
+    st.last = to;
+    st.anim = el.animate(
+      [
+        { transform: `translate(${from.x}%, ${from.y}%) scale(${from.s})` },
+        { transform: `translate(${to.x}%, ${to.y}%) scale(${to.s})` }
+      ],
+      { duration: r(1600, 4200), easing: 'cubic-bezier(.19,1,.22,1)', fill: 'forwards' }
+    );
+    st.anim.onfinish = () => this._drift(key, ref);
+  };
+}
+</script>
+</body>
+</html>
