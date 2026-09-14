@@ -13,18 +13,31 @@ const DIRECTUS_URL = process.env.DIRECTUS_URL || "http://localhost:8055";
 const EMAIL = process.env.DIRECTUS_ADMIN_EMAIL || "admin@reelshub.dev";
 const PASSWORD = process.env.DIRECTUS_ADMIN_PASSWORD || "admin123456";
 
-async function waitForDirectus(timeoutMs = 120000) {
+async function waitForDirectus(timeoutMs = 90000) {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     try {
-      const res = await fetch(`${DIRECTUS_URL}/server/health`);
-      if (res.ok) return;
+      // Prefer auth ping: /server/health often hangs behind hairpin NAT on the VPS itself.
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch(`${DIRECTUS_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: EMAIL, password: PASSWORD }),
+        signal: controller.signal,
+      });
+      clearTimeout(t);
+      // 200 = ready; 400/401 = server up but bad creds (still "up")
+      if (res.status === 200 || res.status === 400 || res.status === 401) return;
     } catch {
       /* retry */
     }
+    process.stdout.write(".");
     await new Promise((r) => setTimeout(r, 2000));
   }
-  throw new Error("Directus did not become healthy in time");
+  throw new Error(
+    `Directus did not become reachable at ${DIRECTUS_URL}. From the VPS use the container IP (http://IP:8055), or run this script from your laptop.`
+  );
 }
 
 async function login() {
