@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "reelshub — контент-хаб для авторов",
   description:
-    "Создай контент-хаб или встрой полки reels в свой сайт. SaaS CMS без X.",
+    "Создай контент-хаб или встрой полки reels в свой сайт.",
 };
 
 export default function RootLayout({

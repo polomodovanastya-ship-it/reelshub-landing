@@ -82,22 +82,20 @@ export async function submitLead(payload: {
   name?: string;
   consent?: boolean;
 }) {
-  const res = await fetch(`${DIRECTUS_URL}/items/leads`, {
+  // Server route saves to Directus and notifies Telegram
+  const res = await fetch("/api/leads", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contact: payload.contact,
       name: payload.name || null,
       consent: !!payload.consent,
-      status: "new",
     }),
   });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(text || "Failed to submit lead");
   }
-  // Public create often returns 204 with no body (no read permission on leads).
-  if (res.status === 204) return { ok: true };
   const text = await res.text();
   if (!text) return { ok: true };
   try {

@@ -42,7 +42,20 @@ async function main() {
     });
     const exJson = await existing.json();
     if (exJson.data?.length) {
-      console.log(`✓ ${collection}.${action}`);
+      const perm = exJson.data[0];
+      const same =
+        JSON.stringify(perm.fields || []) === JSON.stringify(fields);
+      if (same) {
+        console.log(`✓ ${collection}.${action}`);
+        return;
+      }
+      const res = await fetch(`${DIRECTUS_URL}/permissions/${perm.id}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ fields }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      console.log(`↻ ${collection}.${action} fields`);
       return;
     }
     const res = await fetch(`${DIRECTUS_URL}/permissions`, {
@@ -65,7 +78,14 @@ async function main() {
   await ensurePerm({
     collection: "site_settings",
     action: "read",
-    fields: ["*"],
+    // Never expose telegram_bot_token / telegram_chat_id publicly
+    fields: [
+      "site_name",
+      "nav_links",
+      "footer_tagline",
+      "footer_links",
+      "status",
+    ],
   });
   await ensurePerm({
     collection: "leads",

@@ -48,12 +48,36 @@ sudo ss -tlnp | grep -E ':80|:443'
 Когда открывается `https://cms.reelshub.pro`:
 
 ```bash
-export DIRECTUS_URL=https://cms.reelshub.pro
-export DIRECTUS_ADMIN_EMAIL='…from .env.prod…'
-export DIRECTUS_ADMIN_PASSWORD='…from .env.prod…'
+# С VPS лучше внутренний IP контейнера (hairpin NAT на публичный URL часто висит):
+DIP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{println}}{{end}}' "$(docker compose -f docker-compose.prod.yml --env-file .env.prod ps -q directus)" | head -1)
+set -a && source .env.prod && set +a
+export DIRECTUS_URL="http://$DIP:8055"
+export DIRECTUS_ADMIN_EMAIL="$ADMIN_EMAIL"
+export DIRECTUS_ADMIN_PASSWORD="$ADMIN_PASSWORD"
 node scripts/bootstrap.mjs
 node scripts/public-permissions.mjs
 ```
+
+Или с ноутбука: `DIRECTUS_URL=https://cms.reelshub.pro` + те же admin env.
+
+## Telegram (заявки)
+
+1. Создай бота у [@BotFather](https://t.me/BotFather), возьми token.
+2. Узнай chat_id (`getUpdates` после сообщения боту).
+3. В `.env.prod`:
+
+```bash
+TELEGRAM_BOT_TOKEN=…
+TELEGRAM_CHAT_ID=…
+```
+
+4. Пересобери/перезапусти web:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build web
+```
+
+Подробнее — `SETUP.md` § Telegram.
 
 ## URLs
 - Site: https://reelshub.pro  
@@ -65,6 +89,7 @@ node scripts/public-permissions.mjs
 ```bash
 docker compose -f docker-compose.prod.yml --env-file .env.prod ps
 docker compose -f docker-compose.prod.yml --env-file .env.prod logs -f caddy
+docker compose -f docker-compose.prod.yml --env-file .env.prod logs -f web
 ```
 
 Do **not** commit `.env.prod`.
