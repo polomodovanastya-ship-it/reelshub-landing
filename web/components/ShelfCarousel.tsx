@@ -1,18 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import {
-  resolveMediaUrl,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  carouselCoverUrl,
+  carouselImageUrl,
+  carouselVideoUrl,
   type CarouselSlide,
 } from "@/lib/shelves-carousel";
 
 export type { CarouselSlide };
 
 const IMAGE_DURATION_MS = 5000;
-
-function resolveSrc(src: string) {
-  return resolveMediaUrl(src);
-}
+const PROGRESS_TICK_MS = 120;
+/** Minimum time to show blurred cover so the handoff feels intentional */
+const COVER_BLUR_MIN_MS = 450;
 
 function PauseIcon() {
   return (
@@ -97,43 +104,207 @@ function UnmuteIcon() {
   );
 }
 
-export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
+function videoCoverSrc(slides: CarouselSlide[], videoSlide: CarouselSlide) {
+  if (videoSlide.poster) return carouselCoverUrl(videoSlide.poster);
+  const firstImage = slides.find((s) => s.type === "image");
+  if (firstImage) return carouselCoverUrl(firstImage.src);
+  return undefined;
+}
+
+export function ShelfCarousel({
+  slides,
+  locale = "ru",
+}: {
+  slides: CarouselSlide[];
+  locale?: "ru" | "en";
+}) {
+  const count = slides.length;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(true);
   const [progress, setProgress] = useState(0);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const startedAtRef = useRef<number>(0);
-  const accruedRef = useRef<number>(0);
+  /** Video is buffered enough to play; cover can fade out */
+  const [videoReady, setVideoReady] = useState(false);
+  const [coverBlur, setCoverBlur] = useState(false);
 
-  const count = slides.length;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const inViewRef = useRef(true);
+  const indexRef = useRef(index);
+  const pausedRef = useRef(paused);
+  const mutedRef = useRef(muted);
+  const videoReadyRef = useRef(false);
+  const imageStartedRef = useRef(0);
+  const imageAccruedRef = useRef(0);
+  const progressTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const imageAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const videoEnteredAtRef = useRef(0);
+  const revealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  indexRef.current = index;
+  pausedRef.current = paused;
+  mutedRef.current = muted;
+  videoReadyRef.current = videoReady;
+
   const slide = slides[index];
   const isVideo = slide?.type === "video";
+  const videoIndex = slides.findIndex((s) => s.type === "video");
 
-  const goTo = (next: number) => {
-    const i = ((next % count) + count) % count;
-    setIndex(i);
-    setProgress(0);
-    accruedRef.current = 0;
-    startedAtRef.current = performance.now();
-  };
+  const labels =
+    locale === "en"
+      ? {
+          region: "Reels shelves",
+          play: "Play",
+          pause: "Pause",
+          prev: "Previous",
+          next: "Next",
+          mute: "Mute",
+          unmute: "Unmute",
+        }
+      : {
+          region: "Полки роликов",
+          play: "Воспроизвести",
+          pause: "Пауза",
+          prev: "Назад",
+          next: "Вперёд",
+          mute: "Выключить звук",
+          unmute: "Включить звук",
+        };
 
-  const prev = () => goTo(index - 1);
-  const next = () => goTo(index + 1);
+  const clearTimers = useCallback(() => {
+    if (progressTimerRef.current) {
+      clearInterval(progressTimerRef.current);
+      progressTimerRef.current = null;
+    }
+    if (imageAdvanceRef.current) {
+      clearTimeout(imageAdvanceRef.current);
+      imageAdvanceRef.current = null;
+    }
+  }, []);
+
+  const goTo = useCallback(
+    (nextIndex: number) => {
+      if (count === 0) return;
+      const i = ((nextIndex % count) + count) % count;
+      videoRef.current?.pause();
+      if (revealTimerRef.current) {
+        clearTimeout(revealTimerRef.current);
+        revealTimerRef.current = null;
+      }
+      setIndex(i);
+      setProgress(0);
+      imageAccruedRef.current = 0;
+      imageStartedRef.current = performance.now();
+      if (slides[i]?.type === "video") {
+        setMuted(true);
+        setVideoReady(false);
+        setCoverBlur(false);
+        videoEnteredAtRef.current = performance.now();
+      } else {
+        setVideoReady(false);
+        setCoverBlur(false);
+      }
+    },
+    [count, slides]
+  );
+
+  const goNext = useCallback(() => goTo(indexRef.current + 1), [goTo]);
+  const goPrev = useCallback(() => goTo(indexRef.current - 1), [goTo]);
+
+  const scheduleImageAdvance = useCallback(
+    (delayMs: number) => {
+      if (imageAdvanceRef.current) clearTimeout(imageAdvanceRef.current);
+      imageAdvanceRef.current = setTimeout(() => {
+        if (!pausedRef.current && slides[indexRef.current]?.type === "image") {
+          goNext();
+        }
+      }, Math.max(0, delayMs));
+    },
+    [goNext, slides]
+  );
+
+  const syncVideoPlayState = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || slides[indexRef.current]?.type !== "video") return;
+    if (!inViewRef.current || pausedRef.current || !videoReadyRef.current) {
+      video.pause();
+      return;
+    }
+    video.muted = mutedRef.current;
+    const playPromise = video.play();
+    if (playPromise) {
+      void playPromise.catch(() => setPaused(true));
+    }
+  }, [slides]);
+
+  const revealVideo = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || slides[indexRef.current]?.type !== "video") return;
+    if (videoReadyRef.current) return;
+
+    const elapsed = performance.now() - videoEnteredAtRef.current;
+    const wait = Math.max(0, COVER_BLUR_MIN_MS - elapsed);
+
+    const finish = () => {
+      setVideoReady(true);
+      videoReadyRef.current = true;
+      if (!pausedRef.current && inViewRef.current) {
+        video.muted = mutedRef.current;
+        void video.play().catch(() => setPaused(true));
+      }
+    };
+
+    if (wait > 0) {
+      revealTimerRef.current = setTimeout(finish, wait);
+    } else {
+      finish();
+    }
+  }, [slides]);
+
+  const startImageTimers = useCallback(() => {
+    clearTimers();
+    imageStartedRef.current = performance.now();
+
+    progressTimerRef.current = setInterval(() => {
+      if (pausedRef.current || slides[indexRef.current]?.type !== "image") return;
+      const elapsed =
+        imageAccruedRef.current + (performance.now() - imageStartedRef.current);
+      setProgress(Math.min(1, elapsed / IMAGE_DURATION_MS));
+    }, PROGRESS_TICK_MS);
+
+    scheduleImageAdvance(IMAGE_DURATION_MS - imageAccruedRef.current);
+  }, [clearTimers, scheduleImageAdvance, slides]);
 
   const togglePause = () => {
     setPaused((p) => {
       const nextPaused = !p;
       const video = videoRef.current;
-      if (isVideo && video) {
-        if (nextPaused) video.pause();
-        else void video.play().catch(() => {});
-      }
-      if (!nextPaused) {
-        startedAtRef.current = performance.now();
+      if (nextPaused) {
+        if (slides[indexRef.current]?.type === "image") {
+          imageAccruedRef.current +=
+            performance.now() - imageStartedRef.current;
+        }
+        if (video) video.pause();
+        clearTimers();
       } else {
-        accruedRef.current += performance.now() - startedAtRef.current;
+        imageStartedRef.current = performance.now();
+        if (slides[indexRef.current]?.type === "image") {
+          const remaining = IMAGE_DURATION_MS - imageAccruedRef.current;
+          progressTimerRef.current = setInterval(() => {
+            if (
+              pausedRef.current ||
+              slides[indexRef.current]?.type !== "image"
+            )
+              return;
+            const elapsed =
+              imageAccruedRef.current +
+              (performance.now() - imageStartedRef.current);
+            setProgress(Math.min(1, elapsed / IMAGE_DURATION_MS));
+          }, PROGRESS_TICK_MS);
+          scheduleImageAdvance(remaining);
+        } else if (videoReadyRef.current) {
+          syncVideoPlayState();
+        }
       }
       return nextPaused;
     });
@@ -141,106 +312,227 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
 
   const toggleMute = () => {
     setMuted((m) => {
-      const nextMuted = !m;
+      const next = !m;
       const video = videoRef.current;
-      if (video) video.muted = nextMuted;
-      return nextMuted;
+      if (video) video.muted = next;
+      return next;
     });
   };
 
-  // Reset / autoplay when slide changes
-  useEffect(() => {
+  // Entering video slide: show cover, start blur, load video underneath
+  useLayoutEffect(() => {
+    if (slides[index]?.type !== "video") return;
+
+    setVideoReady(false);
+    videoReadyRef.current = false;
+    setCoverBlur(false);
+    videoEnteredAtRef.current = performance.now();
     setProgress(0);
-    accruedRef.current = 0;
-    startedAtRef.current = performance.now();
-    // Browsers require muted for reliable autoplay
-    setMuted(true);
 
-    const video = videoRef.current;
-    if (!video) return;
+    // Kick blur on next frame so the sharp cover paints first
+    const blurKick = requestAnimationFrame(() => {
+      setCoverBlur(true);
+    });
 
-    video.pause();
-    video.currentTime = 0;
-    video.muted = true;
-    if (!paused && isVideo) {
-      void video.play().catch(() => setPaused(true));
+    return () => {
+      cancelAnimationFrame(blurKick);
+      if (revealTimerRef.current) {
+        clearTimeout(revealTimerRef.current);
+        revealTimerRef.current = null;
+      }
+    };
+  }, [index, slides]);
+
+  useLayoutEffect(() => {
+    const el = videoRef.current;
+    if (!el || slides[index]?.type !== "video") return;
+
+    el.muted = true;
+    el.defaultMuted = true;
+
+    const onTime = () => {
+      if (!videoReadyRef.current) return;
+      if (!el.duration || !Number.isFinite(el.duration)) return;
+      setProgress(Math.min(1, el.currentTime / el.duration));
+    };
+    const onEnded = () => goNext();
+    const onReady = () => revealVideo();
+
+    el.addEventListener("timeupdate", onTime);
+    el.addEventListener("ended", onEnded);
+    el.addEventListener("canplay", onReady);
+    el.addEventListener("canplaythrough", onReady);
+
+    // Force load after mount
+    try {
+      el.load();
+    } catch {
+      /* ignore */
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on index/isVideo
-  }, [index, isVideo]);
 
-  // Keep video.muted in sync
+    if (el.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+      onReady();
+    }
+
+    return () => {
+      el.removeEventListener("timeupdate", onTime);
+      el.removeEventListener("ended", onEnded);
+      el.removeEventListener("canplay", onReady);
+      el.removeEventListener("canplaythrough", onReady);
+    };
+  }, [index, slides, goNext, revealVideo]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || typeof IntersectionObserver === "undefined") return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+        if (!entry.isIntersecting) {
+          videoRef.current?.pause();
+          clearTimers();
+        } else if (!pausedRef.current) {
+          if (slides[indexRef.current]?.type === "image") {
+            startImageTimers();
+          } else if (videoReadyRef.current) {
+            syncVideoPlayState();
+          }
+        }
+      },
+      { threshold: 0.35 }
+    );
+    obs.observe(root);
+    return () => obs.disconnect();
+  }, [clearTimers, slides, startImageTimers, syncVideoPlayState]);
+
+  useEffect(() => {
+    const onVis = () => {
+      if (document.hidden) {
+        videoRef.current?.pause();
+        clearTimers();
+      } else if (!pausedRef.current && inViewRef.current) {
+        if (slides[indexRef.current]?.type === "image") startImageTimers();
+        else if (videoReadyRef.current) syncVideoPlayState();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [clearTimers, slides, startImageTimers, syncVideoPlayState]);
+
+  useLayoutEffect(() => {
+    clearTimers();
+    setProgress(0);
+    imageAccruedRef.current = 0;
+    imageStartedRef.current = performance.now();
+
+    if (!inViewRef.current || paused) return;
+    if (slides[index]?.type === "image") {
+      startImageTimers();
+    }
+    return clearTimers;
+  }, [index, paused, slides, clearTimers, startImageTimers]);
+
   useEffect(() => {
     const video = videoRef.current;
     if (video) video.muted = muted;
-  }, [muted, index, isVideo]);
+  }, [muted, index]);
 
-  // Progress + auto-advance for images; video drives its own progress
+  // Preload images + warm video when approaching video slide
   useEffect(() => {
-    if (paused || !slide) return;
-
-    if (isVideo) {
-      const video = videoRef.current;
-      if (!video) return;
-
-      const onTime = () => {
-        if (!video.duration || !Number.isFinite(video.duration)) return;
-        setProgress(Math.min(1, video.currentTime / video.duration));
-      };
-      const onEnded = () => next();
-
-      video.addEventListener("timeupdate", onTime);
-      video.addEventListener("ended", onEnded);
-      return () => {
-        video.removeEventListener("timeupdate", onTime);
-        video.removeEventListener("ended", onEnded);
-      };
-    }
-
-    const tick = (now: number) => {
-      const elapsed = accruedRef.current + (now - startedAtRef.current);
-      const p = Math.min(1, elapsed / IMAGE_DURATION_MS);
-      setProgress(p);
-      if (p >= 1) {
-        next();
-        return;
+    slides.forEach((s) => {
+      if (s.type === "image") {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = carouselImageUrl(s.src);
       }
-      rafRef.current = requestAnimationFrame(tick);
-    };
+      if (s.type === "video") {
+        const cover = videoCoverSrc(slides, s);
+        if (cover) {
+          const img = new Image();
+          img.src = cover;
+        }
+      }
+    });
+  }, [slides]);
 
-    startedAtRef.current = performance.now();
-    rafRef.current = requestAnimationFrame(tick);
+  useEffect(() => {
+    if (videoIndex < 0) return;
+    // Start fetching video bytes one slide before
+    if (index < videoIndex - 1) return;
+    const s = slides[videoIndex];
+    if (!s || s.type !== "video") return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "video";
+    link.href = carouselVideoUrl(s.src);
+    document.head.appendChild(link);
     return () => {
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      link.remove();
     };
-    // next is stable enough via index closure; intentional
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, paused, isVideo, slide]);
+  }, [index, videoIndex, slides]);
 
   if (!slide || count === 0) return null;
 
-  const src = resolveSrc(slide.src);
-  const poster = slide.poster ? resolveSrc(slide.poster) : undefined;
   const showCaption = Boolean(slide.title || slide.body);
+  const videoSrc = isVideo ? carouselVideoUrl(slide.src) : undefined;
+  const coverSrc = isVideo ? videoCoverSrc(slides, slide) : undefined;
 
   return (
-    <div className="shelf-carousel" role="region" aria-roledescription="carousel" aria-label="Полки роликов">
+    <div
+      ref={rootRef}
+      className="shelf-carousel"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={labels.region}
+    >
       <div className="shelf-carousel-frame">
         <div className="shelf-carousel-media">
+          {slides.map((s, i) => {
+            if (s.type !== "image") return null;
+            const active = i === index;
+            return (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={s.src}
+                src={carouselImageUrl(s.src)}
+                alt={s.title || ""}
+                className="shelf-carousel-slide-img"
+                data-active={active ? "true" : "false"}
+                decoding="async"
+                loading="eager"
+                fetchPriority={i === 0 ? "high" : "auto"}
+              />
+            );
+          })}
+
+          {isVideo && coverSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={`cover-${slide.src}`}
+              src={coverSrc}
+              alt=""
+              className="shelf-carousel-video-cover"
+              data-blur={coverBlur && !videoReady ? "true" : "false"}
+              data-hidden={videoReady ? "true" : "false"}
+              decoding="async"
+              draggable={false}
+            />
+          ) : null}
+
           {isVideo ? (
             <video
               key={slide.src}
               ref={videoRef}
-              src={src}
-              poster={poster}
+              className="shelf-carousel-slide-video"
+              data-ready={videoReady ? "true" : "false"}
+              src={videoSrc}
               playsInline
               muted={muted}
-              loop={false}
-              preload="metadata"
+              preload="auto"
+              disablePictureInPicture
             />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={slide.src} src={src} alt={slide.title || ""} />
-          )}
+          ) : null}
         </div>
 
         <div className="shelf-carousel-progress" aria-hidden>
@@ -250,7 +542,11 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
                 className="shelf-carousel-bar-fill"
                 style={{
                   width:
-                    i < index ? "100%" : i === index ? `${progress * 100}%` : "0%",
+                    i < index
+                      ? "100%"
+                      : i === index
+                        ? `${progress * 100}%`
+                        : "0%",
                 }}
               />
             </div>
@@ -262,7 +558,7 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
             type="button"
             className="shelf-carousel-mute"
             onClick={toggleMute}
-            aria-label={muted ? "Включить звук" : "Выключить звук"}
+            aria-label={muted ? labels.unmute : labels.mute}
           >
             {muted ? <MuteIcon /> : <UnmuteIcon />}
           </button>
@@ -271,8 +567,12 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
         <div className="shelf-carousel-bottom">
           {showCaption ? (
             <div className="shelf-carousel-caption">
-              {slide.title ? <p className="shelf-carousel-caption-title">{slide.title}</p> : null}
-              {slide.body ? <p className="shelf-carousel-caption-body">{slide.body}</p> : null}
+              {slide.title ? (
+                <p className="shelf-carousel-caption-title">{slide.title}</p>
+              ) : null}
+              {slide.body ? (
+                <p className="shelf-carousel-caption-body">{slide.body}</p>
+              ) : null}
             </div>
           ) : null}
 
@@ -281,7 +581,8 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
               type="button"
               className="shelf-carousel-pause"
               onClick={togglePause}
-              aria-label={paused ? "Воспроизвести" : "Пауза"}
+              aria-label={paused ? labels.play : labels.pause}
+              disabled={isVideo && !videoReady}
             >
               {paused ? <PlayIcon /> : <PauseIcon />}
             </button>
@@ -290,12 +591,17 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
               <button
                 type="button"
                 className={`shelf-carousel-nav-btn prev${index > 0 ? " active" : ""}`}
-                onClick={prev}
-                aria-label="Назад"
+                onClick={goPrev}
+                aria-label={labels.prev}
               >
                 <ChevronLeft />
               </button>
-              <button type="button" className="shelf-carousel-nav-btn next active" onClick={next} aria-label="Вперёд">
+              <button
+                type="button"
+                className="shelf-carousel-nav-btn next"
+                onClick={goNext}
+                aria-label={labels.next}
+              >
                 <ChevronRight />
               </button>
             </div>
@@ -318,26 +624,69 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           overflow: hidden;
           background: #111;
           isolation: isolate;
+          contain: layout paint;
         }
         .shelf-carousel-media {
           position: absolute;
           inset: 0;
         }
-        .shelf-carousel-media img,
-        .shelf-carousel-media video {
+        .shelf-carousel-slide-img,
+        .shelf-carousel-slide-video,
+        .shelf-carousel-video-cover {
+          position: absolute;
+          inset: 0;
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
         }
+        .shelf-carousel-slide-img {
+          opacity: 0;
+          transition: opacity 0.15s ease;
+          pointer-events: none;
+        }
+        .shelf-carousel-slide-img[data-active="true"] {
+          opacity: 1;
+          z-index: 1;
+        }
+        .shelf-carousel-video-cover {
+          z-index: 3;
+          opacity: 1;
+          transform: scale(1.02);
+          filter: blur(0);
+          transition:
+            opacity 0.45s ease,
+            filter 0.55s ease,
+            transform 0.55s ease;
+          pointer-events: none;
+        }
+        .shelf-carousel-video-cover[data-blur="true"] {
+          filter: blur(10px);
+          transform: scale(1.08);
+        }
+        .shelf-carousel-video-cover[data-hidden="true"] {
+          opacity: 0;
+          filter: blur(14px);
+          pointer-events: none;
+        }
+        .shelf-carousel-slide-video {
+          z-index: 2;
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          background: #111;
+        }
+        .shelf-carousel-slide-video[data-ready="true"] {
+          opacity: 1;
+        }
         .shelf-carousel-progress {
           position: absolute;
-          z-index: 2;
+          z-index: 5;
           top: 14px;
           left: 14px;
           right: 14px;
           display: flex;
           gap: 5px;
+          pointer-events: none;
         }
         .shelf-carousel-bar {
           flex: 1 1 0;
@@ -350,11 +699,11 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           height: 100%;
           background: #000;
           border-radius: inherit;
-          transition: width 0.05s linear;
+          will-change: width;
         }
         .shelf-carousel-mute {
           position: absolute;
-          z-index: 3;
+          z-index: 6;
           top: 28px;
           right: 14px;
           width: 44px;
@@ -368,14 +717,13 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           cursor: pointer;
           color: #fff;
           background: rgba(0, 0, 0, 0.45);
-          backdrop-filter: blur(6px);
         }
         .shelf-carousel-mute:hover {
           background: rgba(0, 0, 0, 0.58);
         }
         .shelf-carousel-bottom {
           position: absolute;
-          z-index: 2;
+          z-index: 6;
           left: 14px;
           right: 14px;
           bottom: 16px;
@@ -410,7 +758,7 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 12px;
+          gap: 10px;
         }
         .shelf-carousel-pause {
           flex: 0 0 auto;
@@ -426,23 +774,31 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           cursor: pointer;
           padding: 0;
         }
-        .shelf-carousel-pause:hover {
+        .shelf-carousel-pause:disabled {
+          opacity: 0.45;
+          cursor: default;
+        }
+        .shelf-carousel-pause:hover:not(:disabled) {
           opacity: 0.85;
         }
         .shelf-carousel-nav {
+          flex: 1 1 auto;
+          min-width: 0;
           display: flex;
+          align-items: center;
+          gap: 10px;
           height: 52px;
-          border-radius: 75px;
-          overflow: hidden;
-          border: 1.5px solid rgba(255, 255, 255, 0.85);
-          background: rgba(40, 40, 40, 0.55);
-          backdrop-filter: blur(8px);
         }
         .shelf-carousel-nav-btn {
-          width: 64px;
-          height: 100%;
+          flex: 1 1 0;
+          width: auto;
+          min-width: 0;
+          height: 52px;
           border: 0;
+          outline: none;
+          box-shadow: none;
           padding: 0;
+          border-radius: 75px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -452,15 +808,22 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
         }
         .shelf-carousel-nav-btn.prev {
           color: rgba(255, 255, 255, 0.75);
-          background: rgba(60, 60, 60, 0.35);
+          background: rgba(80, 80, 80, 0.55);
         }
-        .shelf-carousel-nav-btn.next,
         .shelf-carousel-nav-btn.prev.active {
+          color: #fff;
+          background: #000;
+        }
+        .shelf-carousel-nav-btn.next {
           background: #000;
           color: #fff;
         }
         .shelf-carousel-nav-btn:hover {
           opacity: 0.9;
+        }
+        .shelf-carousel-nav-btn:focus,
+        .shelf-carousel-nav-btn:focus-visible {
+          outline: none;
         }
         @media (max-width: 759px) {
           .shelf-carousel {

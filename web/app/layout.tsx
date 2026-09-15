@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { UI } from "@/lib/i18n";
 
 export const metadata: Metadata = {
-  title: "reelshub — контент-хаб для авторов",
-  description:
-    "Создай контент-хаб или встрой полки reels в свой сайт.",
+  title: UI.ru.metaTitle,
+  description: UI.ru.metaDescription,
+  alternates: { languages: { ru: "/", en: "/en" } },
 };
 
 export default function RootLayout({

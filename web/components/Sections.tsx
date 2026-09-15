@@ -1,6 +1,6 @@
 import type { Section } from "@/lib/directus";
+import { shelvesSlidesFor, UI, type Locale } from "@/lib/i18n";
 import {
-  DEFAULT_SHELVES_SLIDES,
   resolveMediaUrl,
   type CarouselSlide,
 } from "@/lib/shelves-carousel";
@@ -90,7 +90,7 @@ function IntroPair({ section }: { section: Section }) {
   );
 }
 
-function Feature({ section }: { section: Section }) {
+function Feature({ section, locale }: { section: Section; locale: Locale }) {
   const layout = section.layout || "text_left";
   const reverse = layout === "text_right";
   const centered = layout === "centered";
@@ -103,7 +103,7 @@ function Feature({ section }: { section: Section }) {
     items?.carousel?.length
       ? items.carousel
       : section.anchor === "shelves"
-        ? DEFAULT_SHELVES_SLIDES
+        ? shelvesSlidesFor(locale)
         : null;
   const hasMedia = Boolean(section.media_url || mock || carouselSlides);
 
@@ -129,7 +129,7 @@ function Feature({ section }: { section: Section }) {
             style={{ position: "relative", alignItems: "center", width: "100%" }}
           >
             {carouselSlides ? (
-              <ShelfCarousel slides={carouselSlides} />
+              <ShelfCarousel slides={carouselSlides} locale={locale} />
             ) : section.media_url ? (
               <img
                 src={resolveMediaUrl(section.media_url)}
@@ -137,9 +137,9 @@ function Feature({ section }: { section: Section }) {
                 style={{ width: 280, maxWidth: "100%", height: "auto", display: "block", margin: "0 auto" }}
               />
             ) : mock === "domain" ? (
-              <DomainMock />
+              <DomainMock locale={locale} />
             ) : mock === "brand" ? (
-              <BrandMock />
+              <BrandMock locale={locale} />
             ) : null}
           </div>
         ) : null}
@@ -148,7 +148,8 @@ function Feature({ section }: { section: Section }) {
   );
 }
 
-function DomainMock() {
+function DomainMock({ locale }: { locale: Locale }) {
+  const ui = UI[locale];
   return (
     <div
       style={{
@@ -179,14 +180,15 @@ function DomainMock() {
             fontSize: 16,
           }}
         >
-          Подключить
+          {ui.connect}
         </span>
       </div>
     </div>
   );
 }
 
-function BrandMock() {
+function BrandMock({ locale }: { locale: Locale }) {
+  const ui = UI[locale];
   const colors = [
     "#0FFBC0", "#2ECE8A", "#1F7A4D", "#E63946", "#B3121C", "#F2A93B",
     "#FFC93C", "#FF8A3D", "#F45BA0", "#7C4DFF", "#123A8A", "#181818",
@@ -195,7 +197,7 @@ function BrandMock() {
     <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
       <div style={{ padding: "18px 20px", border: "1px solid #E7E7E7", borderRadius: 10, background: "#FBFBFB" }}>
         <span style={{ fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase", color: "#6d6d6d" }}>
-          Логотип
+          {ui.logo}
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12 }}>
           <span
@@ -214,13 +216,13 @@ function BrandMock() {
             +
           </span>
           <span style={{ flex: 1, fontSize: 14, fontWeight: 300, color: "#6d6d6d" }}>
-            SVG или PNG, до 2 МБ
+            {ui.logoHint}
           </span>
         </div>
       </div>
       <div style={{ padding: "18px 20px", border: "1px solid #E7E7E7", borderRadius: 10, background: "#FBFBFB" }}>
         <span style={{ fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase", color: "#6d6d6d" }}>
-          Палитра
+          {ui.palette}
         </span>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 14 }}>
           {colors.map((c) => (
@@ -314,7 +316,13 @@ function Faq({ section }: { section: Section }) {
   );
 }
 
-export function Sections({ sections }: { sections: Section[] }) {
+export function Sections({
+  sections,
+  locale = "ru",
+}: {
+  sections: Section[];
+  locale?: Locale;
+}) {
   return (
     <>
       {sections.map((section) => {
@@ -324,13 +332,13 @@ export function Sections({ sections }: { sections: Section[] }) {
           case "intro_pair":
             return <IntroPair key={section.id} section={section} />;
           case "feature":
-            return <Feature key={section.id} section={section} />;
+            return <Feature key={section.id} section={section} locale={locale} />;
           case "bridge":
             return <Bridge key={section.id} section={section} />;
           case "pricing":
-            return <PricingSection key={section.id} section={section} />;
+            return <PricingSection key={section.id} section={section} locale={locale} />;
           case "contact":
-            return <ContactSection key={section.id} section={section} />;
+            return <ContactSection key={section.id} section={section} locale={locale} />;
           case "faq":
             return <Faq key={section.id} section={section} />;
           default:

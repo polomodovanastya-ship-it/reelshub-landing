@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Section } from "@/lib/directus";
+import { UI, formatMoney, type Locale } from "@/lib/i18n";
 
 type Plan = {
   name: string;
@@ -12,25 +13,28 @@ type Plan = {
   features: string[];
 };
 
-function formatPrice(n: number) {
-  return n.toLocaleString("ru-RU").replace(/\u00a0/g, " ") + " ₽";
-}
-
-export function PricingSection({ section }: { section: Section }) {
+export function PricingSection({
+  section,
+  locale = "ru",
+}: {
+  section: Section;
+  locale?: Locale;
+}) {
+  const ui = UI[locale];
   const [annual, setAnnual] = useState(false);
   const discount = section.annual_discount ?? 0.8;
   const plans = (section.items?.plans as Plan[]) || [];
 
-  const period = annual ? "в месяц при оплате за год" : "в месяц";
+  const period = annual ? ui.perMonthAnnual : ui.perMonth;
 
   const priced = useMemo(
     () =>
       plans.map((p) => {
         const value = annual ? Math.round(p.price * discount) : p.price;
-        const label = (p.from ? "от " : "") + formatPrice(value);
+        const label = (p.from ? ui.from : "") + formatMoney(value, locale);
         return { ...p, label };
       }),
-    [plans, annual, discount]
+    [plans, annual, discount, locale, ui.from]
   );
 
   return (
@@ -43,14 +47,14 @@ export function PricingSection({ section }: { section: Section }) {
             className={!annual ? "active" : ""}
             onClick={() => setAnnual(false)}
           >
-            Месяц
+            {ui.month}
           </button>
           <button
             type="button"
             className={annual ? "active" : ""}
             onClick={() => setAnnual(true)}
           >
-            Год
+            {ui.year}
           </button>
         </div>
       </div>
@@ -72,7 +76,7 @@ export function PricingSection({ section }: { section: Section }) {
               ))}
             </div>
             <a href="#contact" className="btn btn-outline">
-              Выбрать
+              {ui.choose}
             </a>
           </div>
         ))}

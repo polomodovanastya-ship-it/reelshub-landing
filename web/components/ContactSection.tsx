@@ -3,8 +3,16 @@
 import { FormEvent, useState } from "react";
 import type { Section } from "@/lib/directus";
 import { submitLead } from "@/lib/directus";
+import { UI, type Locale } from "@/lib/i18n";
 
-export function ContactSection({ section }: { section: Section }) {
+export function ContactSection({
+  section,
+  locale = "ru",
+}: {
+  section: Section;
+  locale?: Locale;
+}) {
+  const ui = UI[locale];
   const [contact, setContact] = useState("");
   const [consent, setConsent] = useState(false);
   const [state, setState] = useState<"idle" | "loading" | "ok" | "err">("idle");
@@ -30,11 +38,17 @@ export function ContactSection({ section }: { section: Section }) {
 
   return (
     <section id={section.anchor || "contact"} className="section container">
-      <h2 className="h2">{section.title}</h2>
-      {section.body ? <p className="lead" style={{ marginTop: 16 }}>{section.body}</p> : null}
+      <h2 className="h2" style={{ whiteSpace: "pre-line" }}>
+        {section.title}
+      </h2>
+      {section.body ? (
+        <p className="lead" style={{ marginTop: 16 }}>
+          {section.body}
+        </p>
+      ) : null}
       <form className="form" onSubmit={onSubmit}>
         <label>
-          <span>{items.contact_label || "Telegram или email"}</span>
+          <span>{items.contact_label || ui.contactFallback}</span>
           <input
             type="text"
             placeholder={items.contact_placeholder || "@username"}
@@ -44,7 +58,7 @@ export function ContactSection({ section }: { section: Section }) {
           />
         </label>
         <button type="submit" className="btn" disabled={state === "loading"}>
-          {state === "loading" ? "Отправка…" : section.cta_label || "Отправить"}
+          {state === "loading" ? ui.sending : section.cta_label || "Send"}
         </button>
         <label className="consent">
           <input
@@ -54,14 +68,14 @@ export function ContactSection({ section }: { section: Section }) {
             required
           />
           <span>
-            Я согласен с{" "}
+            {ui.consentPrefix}{" "}
             <a href="/policy.pdf" target="_blank" rel="noopener noreferrer">
-              Политикой обработки персональных данных
+              {ui.consentLink}
             </a>
           </span>
         </label>
-        {state === "ok" ? <p className="msg ok">Спасибо! Напишем в течение дня.</p> : null}
-        {state === "err" ? <p className="msg err">Не удалось отправить. Попробуйте ещё раз.</p> : null}
+        {state === "ok" ? <p className="msg ok">{ui.thanks}</p> : null}
+        {state === "err" ? <p className="msg err">{ui.sendError}</p> : null}
       </form>
       <style jsx>{`
         .section {

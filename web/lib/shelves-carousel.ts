@@ -28,6 +28,27 @@ export function resolveMediaUrl(src: string) {
   return `${getDirectusUrl()}/assets/${encodeURIComponent(src)}`;
 }
 
+/** Smaller variants for carousel (Safari / mobile friendly). */
+export function carouselImageUrl(src: string, width = 786) {
+  const url = resolveMediaUrl(src);
+  if (!url.includes("/assets/")) return url;
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}width=${width}&quality=85&format=webp`;
+}
+
+export function carouselPosterUrl(src: string) {
+  return carouselImageUrl(src, 400);
+}
+
+/** Full-frame cover shown while video buffers (sharp then blurred). */
+export function carouselCoverUrl(src: string) {
+  return carouselImageUrl(src, 786);
+}
+
+export function carouselVideoUrl(src: string) {
+  return resolveMediaUrl(src);
+}
+
 /** Production assets uploaded to cms.reelshub.pro File Library */
 export const DEFAULT_SHELVES_SLIDES: CarouselSlide[] = [
   {

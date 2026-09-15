@@ -6,9 +6,11 @@ import type { NavLink } from "@/lib/directus";
 export function Header({
   links,
   logoSrc = "/media/reelshub-logo-3.png",
+  langSwitch,
 }: {
   links: NavLink[];
   logoSrc?: string;
+  langSwitch?: { label: string; href: string };
 }) {
   const [open, setOpen] = useState(false);
 
@@ -33,6 +35,15 @@ export function Header({
             {l.label}
           </a>
         ))}
+        {langSwitch ? (
+          <a
+            href={langSwitch.href}
+            className="lang"
+            onClick={() => setOpen(false)}
+          >
+            {langSwitch.label}
+          </a>
+        ) : null}
       </nav>
       <style jsx>{`
         .site-header {
@@ -73,6 +84,12 @@ export function Header({
           font-weight: 400;
           letter-spacing: 0.08em;
           text-transform: uppercase;
+        }
+        .lang {
+          opacity: 0.7;
+        }
+        .lang:hover {
+          opacity: 1;
         }
         .burger {
           display: none;
