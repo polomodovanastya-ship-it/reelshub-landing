@@ -59,9 +59,48 @@ function ChevronRight() {
   );
 }
 
+function MuteIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 9.5v5h3.2L12 18.5V5.5L7.2 9.5H4z"
+        stroke="#fff"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.5 9.5l4 4M19.5 9.5l-4 4"
+        stroke="#fff"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function UnmuteIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 9.5v5h3.2L12 18.5V5.5L7.2 9.5H4z"
+        stroke="#fff"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.2 9.2a3.8 3.8 0 010 5.6M17.6 7a6.5 6.5 0 010 10"
+        stroke="#fff"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -100,22 +139,40 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
     });
   };
 
+  const toggleMute = () => {
+    setMuted((m) => {
+      const nextMuted = !m;
+      const video = videoRef.current;
+      if (video) video.muted = nextMuted;
+      return nextMuted;
+    });
+  };
+
   // Reset / autoplay when slide changes
   useEffect(() => {
     setProgress(0);
     accruedRef.current = 0;
     startedAtRef.current = performance.now();
+    // Browsers require muted for reliable autoplay
+    setMuted(true);
 
     const video = videoRef.current;
     if (!video) return;
 
     video.pause();
     video.currentTime = 0;
+    video.muted = true;
     if (!paused && isVideo) {
       void video.play().catch(() => setPaused(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only on index/isVideo
   }, [index, isVideo]);
+
+  // Keep video.muted in sync
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) video.muted = muted;
+  }, [muted, index, isVideo]);
 
   // Progress + auto-advance for images; video drives its own progress
   useEffect(() => {
@@ -176,7 +233,7 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
               src={src}
               poster={poster}
               playsInline
-              muted
+              muted={muted}
               loop={false}
               preload="metadata"
             />
@@ -200,6 +257,17 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           ))}
         </div>
 
+        {isVideo ? (
+          <button
+            type="button"
+            className="shelf-carousel-mute"
+            onClick={toggleMute}
+            aria-label={muted ? "Включить звук" : "Выключить звук"}
+          >
+            {muted ? <MuteIcon /> : <UnmuteIcon />}
+          </button>
+        ) : null}
+
         <div className="shelf-carousel-bottom">
           {showCaption ? (
             <div className="shelf-carousel-caption">
@@ -219,10 +287,15 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
             </button>
 
             <div className="shelf-carousel-nav">
-              <button type="button" className="shelf-carousel-nav-btn prev" onClick={prev} aria-label="Назад">
+              <button
+                type="button"
+                className={`shelf-carousel-nav-btn prev${index > 0 ? " active" : ""}`}
+                onClick={prev}
+                aria-label="Назад"
+              >
                 <ChevronLeft />
               </button>
-              <button type="button" className="shelf-carousel-nav-btn next" onClick={next} aria-label="Вперёд">
+              <button type="button" className="shelf-carousel-nav-btn next active" onClick={next} aria-label="Вперёд">
                 <ChevronRight />
               </button>
             </div>
@@ -278,6 +351,27 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           background: #000;
           border-radius: inherit;
           transition: width 0.05s linear;
+        }
+        .shelf-carousel-mute {
+          position: absolute;
+          z-index: 3;
+          top: 28px;
+          right: 14px;
+          width: 44px;
+          height: 44px;
+          border: 0;
+          border-radius: 50%;
+          padding: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #fff;
+          background: rgba(0, 0, 0, 0.45);
+          backdrop-filter: blur(6px);
+        }
+        .shelf-carousel-mute:hover {
+          background: rgba(0, 0, 0, 0.58);
         }
         .shelf-carousel-bottom {
           position: absolute;
@@ -360,7 +454,8 @@ export function ShelfCarousel({ slides }: { slides: CarouselSlide[] }) {
           color: rgba(255, 255, 255, 0.75);
           background: rgba(60, 60, 60, 0.35);
         }
-        .shelf-carousel-nav-btn.next {
+        .shelf-carousel-nav-btn.next,
+        .shelf-carousel-nav-btn.prev.active {
           background: #000;
           color: #fff;
         }

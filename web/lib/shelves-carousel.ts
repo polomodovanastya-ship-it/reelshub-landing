@@ -46,7 +46,7 @@ export const DEFAULT_SHELVES_SLIDES: CarouselSlide[] = [
   },
   {
     type: "video",
-    src: "39cc7423-f6d7-48b9-890d-043f0d813c6c",
+    src: "77801abe-caf7-4e5b-9ac8-dbd9c220a02a",
     poster: "081d2997-6503-4c26-8d1b-09d629821792",
   },
 ];
