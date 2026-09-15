@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getDirectusUrl } from "@/lib/directus";
-import type { CarouselSlide } from "@/lib/shelves-carousel";
+import {
+  resolveMediaUrl,
+  type CarouselSlide,
+} from "@/lib/shelves-carousel";
 
 export type { CarouselSlide };
 
 const IMAGE_DURATION_MS = 5000;
 
 function resolveSrc(src: string) {
-  if (src.startsWith("http") || src.startsWith("/")) return src;
-  return `${getDirectusUrl()}/assets/${src}`;
+  return resolveMediaUrl(src);
 }
 
 function PauseIcon() {

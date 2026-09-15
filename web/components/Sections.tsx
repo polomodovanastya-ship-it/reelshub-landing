@@ -1,6 +1,7 @@
 import type { Section } from "@/lib/directus";
 import {
   DEFAULT_SHELVES_SLIDES,
+  resolveMediaUrl,
   type CarouselSlide,
 } from "@/lib/shelves-carousel";
 import { PricingSection } from "./PricingSection";
@@ -131,7 +132,7 @@ function Feature({ section }: { section: Section }) {
               <ShelfCarousel slides={carouselSlides} />
             ) : section.media_url ? (
               <img
-                src={section.media_url}
+                src={resolveMediaUrl(section.media_url)}
                 alt=""
                 style={{ width: 280, maxWidth: "100%", height: "auto", display: "block", margin: "0 auto" }}
               />

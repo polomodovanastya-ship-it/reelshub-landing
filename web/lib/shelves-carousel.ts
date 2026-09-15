@@ -1,3 +1,5 @@
+import { getDirectusUrl } from "@/lib/directus";
+
 export type CarouselSlide = {
   type: "image" | "video";
   /** Directus file UUID, absolute URL, or site path */
@@ -6,6 +8,25 @@ export type CarouselSlide = {
   title?: string;
   body?: string;
 };
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Resolve Directus file ids /files/{id} and bare UUIDs to /assets/{id}. */
+export function resolveMediaUrl(src: string) {
+  if (!src) return src;
+  if (src.startsWith("http://") || src.startsWith("https://")) return src;
+
+  const filesMatch = src.match(/^\/files\/([0-9a-f-]{36})(?:\?.*)?$/i);
+  if (filesMatch) return `${getDirectusUrl()}/assets/${filesMatch[1]}`;
+
+  if (UUID_RE.test(src)) return `${getDirectusUrl()}/assets/${src}`;
+
+  // Site paths like /media/...
+  if (src.startsWith("/")) return src;
+
+  return `${getDirectusUrl()}/assets/${encodeURIComponent(src)}`;
+}
 
 /** Production assets uploaded to cms.reelshub.pro File Library */
 export const DEFAULT_SHELVES_SLIDES: CarouselSlide[] = [
