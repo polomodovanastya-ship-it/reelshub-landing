@@ -1,6 +1,11 @@
 import type { Section } from "@/lib/directus";
+import {
+  DEFAULT_SHELVES_SLIDES,
+  type CarouselSlide,
+} from "@/lib/shelves-carousel";
 import { PricingSection } from "./PricingSection";
 import { ContactSection } from "./ContactSection";
+import { ShelfCarousel } from "./ShelfCarousel";
 
 function Hero({ section }: { section: Section }) {
   const steps =
@@ -88,7 +93,18 @@ function Feature({ section }: { section: Section }) {
   const layout = section.layout || "text_left";
   const reverse = layout === "text_right";
   const centered = layout === "centered";
-  const mock = (section.items as { mock?: string } | null)?.mock;
+  const items = section.items as {
+    mock?: string;
+    carousel?: CarouselSlide[];
+  } | null;
+  const mock = items?.mock;
+  const carouselSlides =
+    items?.carousel?.length
+      ? items.carousel
+      : section.anchor === "shelves"
+        ? DEFAULT_SHELVES_SLIDES
+        : null;
+  const hasMedia = Boolean(section.media_url || mock || carouselSlides);
 
   return (
     <section id={section.anchor || undefined} className="section container">
@@ -106,9 +122,14 @@ function Feature({ section }: { section: Section }) {
             </a>
           ) : null}
         </div>
-        {!centered && (section.media_url || mock) ? (
-          <div className="feature-col" style={{ position: "relative" }}>
-            {section.media_url ? (
+        {!centered && hasMedia ? (
+          <div
+            className="feature-col"
+            style={{ position: "relative", alignItems: "center", width: "100%" }}
+          >
+            {carouselSlides ? (
+              <ShelfCarousel slides={carouselSlides} />
+            ) : section.media_url ? (
               <img
                 src={section.media_url}
                 alt=""
