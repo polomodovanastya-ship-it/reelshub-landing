@@ -313,8 +313,15 @@ export function ShelfCarousel({
   const toggleMute = () => {
     setMuted((m) => {
       const next = !m;
+      mutedRef.current = next;
       const video = videoRef.current;
-      if (video) video.muted = next;
+      if (video) {
+        video.muted = next;
+        video.defaultMuted = next;
+        if (!next && !pausedRef.current && videoReadyRef.current) {
+          void video.play().catch(() => {});
+        }
+      }
       return next;
     });
   };
@@ -323,6 +330,8 @@ export function ShelfCarousel({
   useLayoutEffect(() => {
     if (slides[index]?.type !== "video") return;
 
+    setMuted(true);
+    mutedRef.current = true;
     setVideoReady(false);
     videoReadyRef.current = false;
     setCoverBlur(false);
@@ -347,8 +356,9 @@ export function ShelfCarousel({
     const el = videoRef.current;
     if (!el || slides[index]?.type !== "video") return;
 
-    el.muted = true;
-    el.defaultMuted = true;
+    // Keep current mute preference — do not force mute on every re-bind
+    el.muted = mutedRef.current;
+    el.defaultMuted = mutedRef.current;
 
     const onTime = () => {
       if (!videoReadyRef.current) return;
@@ -380,7 +390,9 @@ export function ShelfCarousel({
       el.removeEventListener("canplay", onReady);
       el.removeEventListener("canplaythrough", onReady);
     };
-  }, [index, slides, goNext, revealVideo]);
+    // Re-bind only when slide changes — not when revealVideo identity changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -435,8 +447,10 @@ export function ShelfCarousel({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (video) video.muted = muted;
-  }, [muted, index]);
+    if (!video) return;
+    video.muted = muted;
+    video.defaultMuted = muted;
+  }, [muted]);
 
   // Preload images + warm video when approaching video slide
   useEffect(() => {
@@ -682,8 +696,8 @@ export function ShelfCarousel({
           position: absolute;
           z-index: 5;
           top: 14px;
-          left: 14px;
-          right: 14px;
+          left: 24px;
+          right: 24px;
           display: flex;
           gap: 5px;
           pointer-events: none;
