@@ -35,6 +35,38 @@ mkdir -p directus/uploads directus/extensions
 docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
 ```
 
+### S3 (Timeweb) для файлов Directus
+
+В `.env.prod`:
+
+```bash
+STORAGE_LOCATIONS=s3
+STORAGE_S3_KEY=…
+STORAGE_S3_SECRET=…
+STORAGE_S3_BUCKET=…
+STORAGE_S3_REGION=ru-1
+STORAGE_S3_ENDPOINT=https://s3.twcstorage.ru
+STORAGE_S3_FORCE_PATH_STYLE=true
+```
+
+Перезапуск Directus:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d directus
+docker compose -f docker-compose.prod.yml --env-file .env.prod logs --tail 50 directus
+```
+
+Старые файлы из `./directus/uploads` в бакет нужно перенести отдельно (или залить заново в File Library).
+
+Синк с VPS (когда ключи S3 уже в `.env.prod` и `STORAGE_LOCATIONS=s3`):
+
+```bash
+chmod +x scripts/sync-uploads-to-s3.sh
+./scripts/sync-uploads-to-s3.sh
+```
+
+Скрипт зальёт `directus/uploads` в бакет и обновит `directus_files.storage` на `s3`.
+
 Проверка, что Caddy слушает только app-IP:
 
 ```bash

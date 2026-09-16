@@ -45,6 +45,17 @@ services:
       CORS_ENABLED: "true"
       CORS_ORIGIN: ${CORS_ORIGIN:-https://reelshub.pro,https://www.reelshub.pro}
       WEBSOCKETS_ENABLED: "true"
+      # S3 (Timeweb). If STORAGE_LOCATIONS is unset, Directus keeps using local ./uploads.
+      STORAGE_LOCATIONS: ${STORAGE_LOCATIONS:-local}
+      STORAGE_LOCAL_DRIVER: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+      STORAGE_S3_DRIVER: s3
+      STORAGE_S3_KEY: ${STORAGE_S3_KEY:-}
+      STORAGE_S3_SECRET: ${STORAGE_S3_SECRET:-}
+      STORAGE_S3_BUCKET: ${STORAGE_S3_BUCKET:-}
+      STORAGE_S3_REGION: ${STORAGE_S3_REGION:-ru-1}
+      STORAGE_S3_ENDPOINT: ${STORAGE_S3_ENDPOINT:-}
+      STORAGE_S3_FORCE_PATH_STYLE: ${STORAGE_S3_FORCE_PATH_STYLE:-true}
     networks:
       - internal
       - edge
