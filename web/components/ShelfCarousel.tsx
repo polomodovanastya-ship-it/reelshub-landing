@@ -634,7 +634,7 @@ export function ShelfCarousel({
           width: 100%;
           height: auto;
           aspect-ratio: 393 / 600;
-          border-radius: 40px;
+          border-radius: 32px;
           overflow: hidden;
           background: #111;
           isolation: isolate;
